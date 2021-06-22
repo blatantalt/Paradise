@@ -14,10 +14,10 @@ display some UI to show all the memories it stores
 /datum/memorybank
 	var/list/mems = new()			//List of memories stored here
 
-/datum/memorybank/New(var/list/Mems)
+/datum/memorybank/New(list/Mems)
 	mems = Mems
 
-/datum/memorybank/query(var/list/filters)
+/datum/memorybank/query(list/filters)
 	//ok we want to search the memory bank by: ueffect, depth, difficulty, and text in title and description
 	//consider a 2d array
 	/*
@@ -39,7 +39,7 @@ display some UI to show all the memories it stores
 			results = search(results,currFilter)
 
 
-/datum/memorybank/search(var/list/toSearch,var/list/currFilter)
+/datum/memorybank/search(list/toSearch,list/currFilter)
 	var/f = currFilter[1]
 	var/q = currFilter[2]
 	var/list/results = new()
@@ -77,5 +77,36 @@ display some UI to show all the memories it stores
 		else
 			return toSearch
 
+/*
+* Okay. TGUI time.
+* I want the TGUI for this to be pulled up when using a particular verb. I think?
+* In the meantime, I suppose that we can just... use ui_interact
+* I have absolutely fuck all clue if that will work on a datum, and not a mob, though.
+* I have a feeling that it won't.
+*
+* What if I made it a ui_interact on the brain item? Let's try that for now.
+*/
+/obj/item/organ/internal/brain/ui_interact(mob/user, datum/tgui/ui)
+	ui = SStgui.try_update_ui(user, src, ui)
+	if(!ui)
+		ui = new(user, src, "Memory Bank")
+		ui.open()
 
+/obj/item/organ/internal/brain/ui_data(mob/user)
+	var/list/data = list()
+	data["health"] = health
+	data["color"] = color
 
+	return data
+
+/obj/item/organ/internal/brain/ui_act(action, params)
+	. = ..()
+	if(.)
+		return
+	if (action == "change_color")
+		var/new_color = params["color"]
+		if(!(color in allowed_colors))
+			return FALSE
+		color = new_color
+		. = TRUE
+	update_icon()

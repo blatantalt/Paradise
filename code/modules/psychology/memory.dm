@@ -10,7 +10,7 @@
 	var/difficulty = 1			//int value one to five describing how difficult it is to modify (basically, puzzle difficulty)
 	var/uEffect = 0				//what unique effect this memory will have on a person who has it. 0 is none. (more details later.)
 
-/datum/memory/New(var/Title,var/Desc,var/Dep,var/Diff,var/Eff)
+/datum/memory/New(Title,Desc,Dep,Diff,Eff)
 	title = Title
 	description = desc
 	depth = Dep
