@@ -2250,6 +2250,7 @@
 #include "code\modules\projectiles\projectile\magic.dm"
 #include "code\modules\projectiles\projectile\reusable.dm"
 #include "code\modules\projectiles\projectile\special.dm"
+#include "code\modules\psychology\disorders\disorder.dm"
 #include "code\modules\reagents\chem_splash.dm"
 #include "code\modules\reagents\reagent_containers.dm"
 #include "code\modules\reagents\reagent_dispenser.dm"
