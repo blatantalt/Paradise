@@ -77,6 +77,16 @@ display some UI to show all the memories it stores
 		else
 			return toSearch
 
+/datum/memorybank/getMemFromIndex(var/fetch)
+	var/list/output = list(
+		title = mems[fetch].title
+		description = mems[fetch].description
+		depth = mems[fetch].depth
+		difficulty = mems[fetch].difficulty
+		uEffect = mems[fetch].uEffect
+	)
+	return output
+
 /*
 * Okay. TGUI time.
 * I want the TGUI for this to be pulled up when using a particular verb. I think?
@@ -86,16 +96,36 @@ display some UI to show all the memories it stores
 *
 * What if I made it a ui_interact on the brain item? Let's try that for now.
 */
+
+
+
+/*
+	BIG IMPORTANT TO DOS
+	1. make the memories list query some stuff
+	2. some way to get more descriptive ueffect text
+	3. memory tampering notifications
+*/
 /obj/item/organ/internal/brain/ui_interact(mob/user, datum/tgui/ui)
 	ui = SStgui.try_update_ui(user, src, ui)
 	if(!ui)
-		ui = new(user, src, "Memory Bank")
+		ui = new(user, src, "MemoryInterface")
 		ui.open()
 
 /obj/item/organ/internal/brain/ui_data(mob/user)
 	var/list/data = list()
-	data["health"] = health
-	data["color"] = color
+	data["selected"] = 0
+	data["memories"] = list()
+	for(i=1, 1<=membank.mems.len, i++)
+		var/list/data_mem = list(
+			title = membank.mems[i].title
+			description = membank.mems[i].description
+			depth = membank.mems[i].depth
+			difficulty = membank.mems[i].difficulty
+			uEffect = membank.mems[i].uEffect
+			index = i
+		)
+		data["memories"] += list(data_mem)
+	data["thisMemory"] = membank.getMemFromIndex(1)
 
 	return data
 
@@ -103,10 +133,15 @@ display some UI to show all the memories it stores
 	. = ..()
 	if(.)
 		return
-	if (action == "change_color")
-		var/new_color = params["color"]
-		if(!(color in allowed_colors))
-			return FALSE
-		color = new_color
-		. = TRUE
+
+	if (action == "selMem")
+		var/memory_index = params['index']
+		thisMemory = membank.getMemFromIndex(memory_index)
+		if(memory_index == selected)
+			selected = 0
+			. = TRUE
+		else()
+			selected = memory_index
+			. = TRUE
+
 	update_icon()

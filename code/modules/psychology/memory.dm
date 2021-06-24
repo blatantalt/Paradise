@@ -16,3 +16,6 @@
 	depth = Dep
 	difficulty = Diff
 	uEffect = Eff
+
+/datum/memory/getTitle()
+	return title
