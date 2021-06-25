@@ -19,20 +19,20 @@
 	var/mmi_icon_state = "mmi_full"
 
 	var/datum/memorybank/membank = list(	//memory bank hours
-		new datum/memory("Cogitation","I think, therefore I am.",1,1,0),
-		new datum/memory("Hello world",{"Programmed to work and not to feel
+		new /datum/memory("Cogitation","I think, therefore I am.",1,1,0),
+		new /datum/memory("Hello world",{"Programmed to work and not to feel
 		Not even sure that this is real
 		Hello world
 
-		find my voice
+		Find my voice
 		although it sounds like bits and bytes
 		my circuitry is filled with mites,
 		hello, world
 
-		Oh, will I find a love
-		Oh, or a power plug
-		Oh, digitally isolated
-		Oh, creator, please don't leave me waiting...
+		Oh, will I find a love...
+		Oh, or a power plug?
+		Oh, digitally isolated...
+		Oh, creator, please don't leave me waiting!
 
 		Hello world <3"}, 1, 1, 0)
 	)

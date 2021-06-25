@@ -13,11 +13,13 @@ display some UI to show all the memories it stores
 */
 /datum/memorybank
 	var/list/mems = new()			//List of memories stored here
+	var/index = 1
+	var/selected = 0
 
 /datum/memorybank/New(list/Mems)
 	mems = Mems
 
-/datum/memorybank/query(list/filters)
+/datum/memorybank/proc/query(list/filters)
 	//ok we want to search the memory bank by: ueffect, depth, difficulty, and text in title and description
 	//consider a 2d array
 	/*
@@ -31,6 +33,8 @@ display some UI to show all the memories it stores
 	*/
 	var/list/currFilter = new()
 	var/list/results = new()
+	var/selected = 0
+	var/i
 	for (i = 1, i<= filters.len, i++)
 		currFilter = filters[i]
 		if (i==1)
@@ -39,21 +43,22 @@ display some UI to show all the memories it stores
 			results = search(results,currFilter)
 
 
-/datum/memorybank/search(list/toSearch,list/currFilter)
+/datum/memorybank/proc/search(list/toSearch,list/currFilter)
 	var/f = currFilter[1]
 	var/q = currFilter[2]
 	var/list/results = new()
+	var/i
 	switch (f)
 		if (0)	//title
 			for (i = 1, i <= toSearch.len, i++)
 				var/datum/memory/curr = toSearch[i]
-				if (findtext(toSearch[i].title),q)
+				if (findtext(toSearch[i].title, q))
 					results.Add(curr)
 			return results
 		if (1)	//description
 			for (i = 1, i <= toSearch.len, i++)
 				var/datum/memory/curr = toSearch[i]
-				if (findtext(toSearch[i].description),q)
+				if (findtext(toSearch[i].description, q))
 					results.Add(curr)
 			return results
 		if (2)	//depth
@@ -77,13 +82,13 @@ display some UI to show all the memories it stores
 		else
 			return toSearch
 
-/datum/memorybank/getMemFromIndex(var/fetch)
+/datum/memorybank/proc/getMemFromIndex(var/fetch)
 	var/list/output = list(
-		title = mems[fetch].title
-		description = mems[fetch].description
-		depth = mems[fetch].depth
-		difficulty = mems[fetch].difficulty
-		uEffect = mems[fetch].uEffect
+		title = mems[fetch].title,
+		description = mems[fetch].description,
+		depth = mems[fetch].depth,
+		difficulty = mems[fetch].difficulty,
+		uEffect = mems[fetch].uEffect,
 	)
 	return output
 
@@ -113,19 +118,20 @@ display some UI to show all the memories it stores
 
 /obj/item/organ/internal/brain/ui_data(mob/user)
 	var/list/data = list()
-	data["selected"] = 0
+	data["selected"] = membank.selected
 	data["memories"] = list()
+	var/i
 	for(i=1, 1<=membank.mems.len, i++)
 		var/list/data_mem = list(
-			title = membank.mems[i].title
-			description = membank.mems[i].description
-			depth = membank.mems[i].depth
-			difficulty = membank.mems[i].difficulty
-			uEffect = membank.mems[i].uEffect
+			title = membank.mems[i].title,
+			description = membank.mems[i].description,
+			depth = membank.mems[i].depth,
+			difficulty = membank.mems[i].difficulty,
+			uEffect = membank.mems[i].uEffect,
 			index = i
 		)
 		data["memories"] += list(data_mem)
-	data["thisMemory"] = membank.getMemFromIndex(1)
+	data["thisMemory"] = membank.getMemFromIndex(membank.index)
 
 	return data
 
@@ -135,13 +141,13 @@ display some UI to show all the memories it stores
 		return
 
 	if (action == "selMem")
-		var/memory_index = params['index']
-		thisMemory = membank.getMemFromIndex(memory_index)
-		if(memory_index == selected)
-			selected = 0
+		var/memory_index = params["index"]
+		membank.index = memory_index
+		if(memory_index == membank.selected)
+			membank.selected = 0
 			. = TRUE
-		else()
-			selected = memory_index
+		else
+			membank.selected = memory_index
 			. = TRUE
 
 	update_icon()

@@ -12,10 +12,7 @@
 
 /datum/memory/New(Title,Desc,Dep,Diff,Eff)
 	title = Title
-	description = desc
+	description = Desc
 	depth = Dep
 	difficulty = Diff
 	uEffect = Eff
-
-/datum/memory/getTitle()
-	return title

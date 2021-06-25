@@ -1,7 +1,7 @@
 import { Flex } from '../../../tgui/packages/tgui/components';
-import { useBackend } from  '../backend';
-import { Button, LabeledList, Section } from '../components';
-import { Window } from '../layouts';
+import { useBackend } from  '../../../tgui/packages/tgui/backend';
+import { Button, LabeledList, Section } from '../../../tgui/packages/tgui/components';
+import { Window } from '../../../tgui/packages/tgui/layouts';
 
 export const MemoryInterface = (props, context) => {
 	const {act, data} = useBackend(context);
@@ -25,7 +25,7 @@ export const MemoryInterface = (props, context) => {
 										content={item.title}
 										textAlign="center"
 										onClick = {() => act('selMem',{
-											'index': item.index})} />
+											'index': item.index,})} />
 								})}
 							</Flex>
 						</Section>
